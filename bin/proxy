@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#DB PROXY
+cloud_sql_proxy.exe -instances=pr-reviewer-6f90:us-central1:postgresql-db-development=tcp:5434
+
+#Staging DB PROXY
+cloud_sql_proxy.exe -instances=pr-reviewer-6f90:us-central1:postgresql-db-staging=tcp:5434
+
+#Sandbox DB PROXY
+cloud_sql_proxy.exe -instances=pr-reviewer-6f90:us-central1:postgresql-db-sandbox=tcp:5434
+
+#Prod DB PROXY
+cloud_sql_proxy.exe -instances=pr-reviewer-6f90:us-central1:postgresql-db-production=tcp:5434

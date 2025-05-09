@@ -1,0 +1,6 @@
+#!/bin/sh
+# Execute go tests
+
+#cd $(dirname "${0}")/..
+
+docker-compose run --rm test

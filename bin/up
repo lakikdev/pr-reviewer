@@ -1,0 +1,4 @@
+#!/bin/sh
+
+docker-compose up --build server
+# docker-compose logs server -f

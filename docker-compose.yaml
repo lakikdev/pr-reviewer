@@ -1,0 +1,46 @@
+services:
+  # ✅ Redis
+  redis:
+    image: redis:alpine
+    mem_limit: 1024m
+    command: ["redis-server", "--appendonly", "no", "--maxmemory", "1gb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - 6379:6379
+
+  # ✅ PostgreSQL Database
+  db:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-custom-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+
+
+  # ✅ Go Server
+  server:
+    build: .
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .secret-env
+    links:
+      - db:db
+      - redis:redis
+    ports:
+      - 8080:8080
+    environment:
+      ENVIRONMENT: 'local'
+      DB_USER: 'postgres'
+      DB_PASSWORD: 'password'
+      DB_HOST: 'db'
+      DB_PORT: '5432'
+      DB_NAME: 'postgres'
+      DB_MIGRATE: 'true'
+      DATABASE_TIMEOUT_MS: 10000
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
+      OLLAMA_MODEL: 'qwen2.5-coder:7b'
+

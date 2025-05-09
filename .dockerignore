@@ -1,0 +1,6 @@
+Makefile
+Dockerfile
+docker-compose.yaml
+.git/
+bin/
+terraform/

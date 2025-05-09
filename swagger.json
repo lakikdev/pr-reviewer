@@ -1,0 +1,1287 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/analyze": {
+      "post": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nStarts analyzing the PR specified in request body\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error)\nErr500xTransaction_002 - Error while committing all changes - (server internal error)",
+        "tags": [
+          "Analyze"
+        ],
+        "summary": "Analyze PR ----- [API KEY]",
+        "operationId": "analyzeStart",
+        "parameters": [
+          {
+            "description": "PR details.",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "PR details.",
+              "type": "object",
+              "$ref": "#/definitions/AnalyzeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "PR analysis response",
+            "schema": {
+              "$ref": "#/definitions/AnalyzeResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/api-key/generate": {
+      "post": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nGenerate API KEY\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xAPIkey_001 - Error generating API Key - (server internal error)\nErr500xAPIkey_002 - Error storing API Key - (server internal error)\nErr500xTransaction_001 - Error while connecting to database - (server internal error)\nErr500xTransaction_002 - Error while committing all changes - (server internal error)",
+        "tags": [
+          "APIKey"
+        ],
+        "summary": "Generate API KEY ----- [Admin]",
+        "operationId": "apiKeyGenerate",
+        "parameters": [
+          {
+            "description": "API Key Data.",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "API Key Data.",
+              "type": "object",
+              "$ref": "#/definitions/GenerateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "API key response",
+            "schema": {
+              "$ref": "#/definitions/GenerateResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/version": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "App Version",
+        "operationId": "versionV1",
+        "responses": {
+          "200": {
+            "description": "Return current Git Header version used",
+            "schema": {
+              "$ref": "#/definitions/ServerVersion"
+            }
+          }
+        }
+      }
+    },
+    "/migrate": {
+      "post": {
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nLogin user using UDID, Credentials, Sequence Web3 Wallet\n\nIf \"type\" was set to \"udid\" - endpoint will expect fields 'udid' to be provided\nIf \"type\" was set to \"credentials\" - endpoint will expect fields 'email' and 'password' to be provided\nIf \"type\" was set to \"sequenceWallet\" - endpoint will expect fields 'walletAddress' and 'proof' to be provided\nIf \"type\" was set to \"sequenceWaasWallet\" - endpoint will expect fields 'token' to be provided\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticatorBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xAuthenticatorBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticator_001 - Error while verifying if request data has all required fields - (unknown auth type) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e403: Forbidden\u003c/b\u003e\u003cbr\u003e\nErr403xCredentialsAuth_001 - Error checking auth data - (invalid credentials) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e409: Conflict\u003c/b\u003e\u003cbr\u003e\nErr409xAuthenticatorUser_001 - Error creating user - (auth option already in use) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xIssueToken_001 - Error while trying to issue access and refresh tokens - (server internal error) \u003cbr\u003e\nErr500xRoles_001 - Error while getting user roles - (server internal error) \u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorUser_001 - Error while getting user - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_004 - Error while setting password - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_001 - Error validating wallet proof - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_002 - Error validating wallet proof - (proof is invalid) \u003cbr\u003e\nErr500xSequenceAuth_003 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_004 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_005 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_001 - Error validating token - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_002 - Error validating token - (token is invalid) \u003cbr\u003e\nErr500xSequenceWaaSAuth_003 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_004 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_005\t- Error checking auth data - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "authSignin",
+        "parameters": [
+          {
+            "description": "Sign In request data",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Sign In request data",
+              "type": "object",
+              "$ref": "#/definitions/SignInRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is logged in successfully, returns tokens with userId",
+            "schema": {
+              "$ref": "#/definitions/SignInResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/refreshToken": {
+      "post": {
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nReturns access and refresh tokens\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e401: Unauthorized\u003c/b\u003e\u003cbr\u003e\nErr401xToken_001 - Error verifying refresh token - (token invalid) \u003cbr\u003e\nErr401xSession_001 - Error session not exist - (session not found) \u003cbr\u003e\nErr401xSession_002 - Error session not exist - (session not found) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e404: Not Found\u003c/b\u003e\u003cbr\u003e\nErr404xUser_001 - Error while getting user by ID - (user not found) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xUser_001 - Error while getting user by ID - (server internal error) \u003cbr\u003e\nErr500xToken_001 - Error while trying to issue access and refresh tokens - (server internal error) \u003cbr\u003e\nErr500xRole_001 - Error while getting user roles - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh access tokens",
+        "operationId": "refreshToken",
+        "parameters": [
+          {
+            "description": "Refresh token request data",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Refresh token request data",
+              "type": "object",
+              "$ref": "#/definitions/RefreshTokenRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "token refreshed",
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nLogin user using UDID, Credentials, Sequence Web3 Wallet\n\nIf \"type\" was set to \"udid\" - endpoint will expect fields 'udid' to be provided\nIf \"type\" was set to \"credentials\" - endpoint will expect fields 'email' and 'password' to be provided\nIf \"type\" was set to \"sequenceWallet\" - endpoint will expect fields 'walletAddress' and 'proof' to be provided\nIf \"type\" was set to \"sequenceWaasWallet\" - endpoint will expect fields 'token' to be provided\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticatorBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xAuthenticatorBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticator_001 - Error while verifying if request data has all required fields - (unknown auth type) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e403: Forbidden\u003c/b\u003e\u003cbr\u003e\nErr403xCredentialsAuth_001 - Error checking auth data - (invalid credentials) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e409: Conflict\u003c/b\u003e\u003cbr\u003e\nErr409xAuthenticatorUser_001 - Error creating user - (auth option already in use) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xIssueToken_001 - Error while trying to issue access and refresh tokens - (server internal error) \u003cbr\u003e\nErr500xRoles_001 - Error while getting user roles - (server internal error) \u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorUser_001 - Error while getting user - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_004 - Error while setting password - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_001 - Error validating wallet proof - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_002 - Error validating wallet proof - (proof is invalid) \u003cbr\u003e\nErr500xSequenceAuth_003 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_004 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_005 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_001 - Error validating token - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_002 - Error validating token - (token is invalid) \u003cbr\u003e\nErr500xSequenceWaaSAuth_003 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_004 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceWaaSAuth_005\t- Error checking auth data - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "authSignin",
+        "parameters": [
+          {
+            "description": "Sign In request data",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Sign In request data",
+              "type": "object",
+              "$ref": "#/definitions/SignInRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is logged in successfully, returns tokens with userId",
+            "schema": {
+              "$ref": "#/definitions/SignInResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nCreate user using UDID, Credentials, Sequence Web3 Wallet\n\nIf \"type\" was set to \"udid\" - endpoint will expect fields 'udid' to be provided\nIf \"type\" was set to \"credentials\" - endpoint will expect fields 'email' and 'password' to be provided\nIf \"type\" was set to \"sequenceWallet\" - endpoint will expect fields 'walletAddress' and 'proof' to be provided\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticatorBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xAuthenticatorBind_002 - Error while verifying if request data has all required fields - (not all fields found) \u003cbr\u003e\nErr400xAuthenticator_001 - Error while verifying if request data has all required fields - (unknown auth type) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e403: Forbidden\u003c/b\u003e\u003cbr\u003e\nErr403xCredentialsAuth_001 - Error checking auth data - (invalid credentials) \u003cbr\u003e\n\n\n\u003cbr\u003e\u003cb\u003e409: Conflict\u003c/b\u003e\u003cbr\u003e\nErr409xAuthenticatorUser_001 - Error creating user - (auth option already in use) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xIssueToken_001 - Error while trying to issue access and refresh tokens - (server internal error) \u003cbr\u003e\nErr500xRoles_001 - Error while getting user roles - (server internal error) \u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorUser_001 - Error while creating a user - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorUser_002 - Error while creating a user - (server internal error) \u003cbr\u003e\nErr500xAuthenticatorUser_003 - Error while adding auth option for user - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xUDIDAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_001 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_002 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_003 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xCredentialsAuth_004 - Error while setting password - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_001 - Error validating wallet proof - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_002 - Error validating wallet proof - (proof is invalid) \u003cbr\u003e\nErr500xSequenceAuth_003 - Error getting user data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_004 - Error checking auth data - (server internal error) \u003cbr\u003e\nErr500xSequenceAuth_005 - Error checking auth data - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create user",
+        "operationId": "authSignup",
+        "parameters": [
+          {
+            "description": "Sign Up request data",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Sign Up request data",
+              "type": "object",
+              "$ref": "#/definitions/SignUpRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User is created successfully",
+            "schema": {
+              "$ref": "#/definitions/SignUpResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/users/:userID": {
+      "get": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nReturns user by id\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters)\n\n\u003cbr\u003e\u003cb\u003e404: Not Found\u003c/b\u003e\u003cbr\u003e\nErr404xUser_001 - Error while getting user - (user not found)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xUser_001 - Error while getting user - (internal server error)\nErr500xRoles_001 - Error while getting user roles - (internal server error)\nErr500xTransaction_001 - Error while connecting to database - (server internal error)\nErr500xTransaction_002 - Error while committing all changes - (server internal error)",
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user by id  ----- [Admin, MemberIsTarget]",
+        "operationId": "userGet",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "userID",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data",
+            "schema": {
+              "$ref": "#/definitions/GetUserResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nDeletes user by ID\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xUser_001 - Error deleting user - (internal server error)\nErr500xTransaction_001 - Error while connecting to database - (server internal error)\nErr500xTransaction_002 - Error while committing all changes - (server internal error)",
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete user ----- [Admin, MemberIsTarget]",
+        "operationId": "userDelete",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/DeleteUserResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nUpdates user by ID and returns updated user\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400x001 - Error while decoding request data to JSON - (could not decode parameters)\nErr400x002 - Error while verifying if request data has all required fields - (not all fields found)\nErr400x003 - User not authorized to edit password - (user not authorized)\n\n\u003cbr\u003e\u003cb\u003e404: Not Found\u003c/b\u003e\u003cbr\u003e\nErr404x001 - Error while getting user by email - (user not found)\nErr404x002 - Error while updating user - (user not found)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500x001 - Error while getting user by email - (internal server error)\nErr500x002 - Error while hashing and setting new password - (internal server error)\nErr500x003 - Error while updating metadata - (internal server error)",
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user  ----- [Admin, MemberIsTarget]",
+        "operationId": "userUpdate",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "userID",
+            "in": "path"
+          },
+          {
+            "description": "User model",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "User model",
+              "type": "object",
+              "$ref": "#/definitions/UpdateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated successfully, user model",
+            "schema": {
+              "$ref": "#/definitions/UpdateUserResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/users/:userID/roles": {
+      "get": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nGet user's roles by ID. example role: [\"admin\"]\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xRoles_001 - Error getting user's roles - (server internal error) \u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "UserRoles"
+        ],
+        "summary": "Get user's roles ----- [Admin]",
+        "operationId": "userGetRolesByUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "userID",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's roles",
+            "schema": {
+              "$ref": "#/definitions/GetRolesResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nGrant role to user by ID. example role: [\"admin\"]\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xRoles_001 - Error granting role - (server internal error)\nErr500xRoles_002 - Error getting user's roles - (server internal error)\nErr500xTransaction_001 - Error while connecting to database - (server internal error)\nErr500xTransaction_002 - Error while committing all changes - (server internal error)",
+        "tags": [
+          "UserRoles"
+        ],
+        "summary": "Grant role to user ----- [Admin]",
+        "operationId": "userRoleGrant",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "userID",
+            "in": "path"
+          },
+          {
+            "description": "Role grant.",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Role grant.",
+              "type": "object",
+              "$ref": "#/definitions/GrantRoleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "List of user's roles",
+            "schema": {
+              "$ref": "#/definitions/GrantRoleResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/users/list": {
+      "post": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nReturns list of users;\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400xBind_001 - Error while decoding request data to JSON - (could not decode parameters) \u003cbr\u003e\nErr400xBind_002 - Error while verifying request data - (could not verify parameters) \u003cbr\u003e\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500xUser_001 - Error getting users list - (internal server error) \u003cbr\u003e\nErr500xRoles_001 - Error while getting user roles - (internal server error) \u003cbr\u003e\nErr500xTransaction_001 - Error while connecting to database - (server internal error) \u003cbr\u003e\nErr500xTransaction_002 - Error while committing all changes - (server internal error) \u003cbr\u003e",
+        "tags": [
+          "User"
+        ],
+        "summary": "List and search users  ----- [Admin]",
+        "operationId": "userList",
+        "parameters": [
+          {
+            "description": "Search query specifications, page limit and offset",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Search query specifications, page limit and offset",
+              "type": "object",
+              "$ref": "#/definitions/ListUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users returned by the search",
+            "schema": {
+              "$ref": "#/definitions/ListUserResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/users/userID/roles": {
+      "delete": {
+        "security": [
+          {
+            "api_key": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "\u003cb\u003eDescription\u003c/b\u003e\u003cbr\u003e\nRemove role from user by ID. example role: [\"admin\"]\n\n\u003cbr\u003e\u003cb\u003e400: Bad Request\u003c/b\u003e\u003cbr\u003e\nErr400x001 - Error while decoding request data to JSON - (could not decode parameters)\n\n\u003cbr\u003e\u003cb\u003e500: Internal Server Error\u003c/b\u003e\u003cbr\u003e\nErr500x001 - Error while removing user's role",
+        "tags": [
+          "UserRoles"
+        ],
+        "summary": "Remove role from user ----- [Admin]",
+        "operationId": "userRoleRemove",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "User ID",
+            "name": "userID",
+            "in": "path"
+          },
+          {
+            "description": "Role grant.",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "description": "Role grant.",
+              "type": "object",
+              "$ref": "#/definitions/RemoveRoleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role is granted successfully",
+            "schema": {
+              "$ref": "#/definitions/RemoveRoleResponse"
+            }
+          },
+          "default": {
+            "description": "genericError",
+            "schema": {
+              "$ref": "#/definitions/genericError"
+            }
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "App Version",
+        "operationId": "version",
+        "responses": {
+          "200": {
+            "description": "Return current Git Header version used",
+            "schema": {
+              "$ref": "#/definitions/ServerVersion"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AnalyzeRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "owner": {
+          "type": "string",
+          "x-go-name": "Owner"
+        },
+        "slug": {
+          "type": "string",
+          "x-go-name": "Slug"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/analyze"
+    },
+    "AnalyzeResponse": {
+      "type": "object",
+      "properties": {
+        "started": {
+          "type": "boolean",
+          "x-go-name": "Started"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/analyze"
+    },
+    "DateRange": {
+      "type": "object",
+      "properties": {
+        "endAt": {
+          "$ref": "#/definitions/FilterItemData"
+        },
+        "startAt": {
+          "$ref": "#/definitions/FilterItemData"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "DeleteUserResponse": {
+      "type": "object",
+      "properties": {
+        "deleted": {
+          "type": "boolean",
+          "x-go-name": "Deleted"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/user"
+    },
+    "DeviceID": {
+      "type": "string",
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "FilterData": {
+      "type": "object",
+      "properties": {
+        "inDateRange": {
+          "$ref": "#/definitions/DateRange"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FilterItemData"
+          },
+          "x-go-name": "Items"
+        },
+        "quickFilterValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "QuickFilterValues"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "FilterItemData": {
+      "type": "object",
+      "properties": {
+        "columnField": {
+          "type": "string",
+          "x-go-name": "Field"
+        },
+        "operatorValue": {
+          "type": "string",
+          "x-go-name": "OperatorValue"
+        },
+        "value": {
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "GenerateRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/apiKey"
+    },
+    "GenerateResponse": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "x-go-name": "Key"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/apiKey"
+    },
+    "GetRolesResponse": {
+      "type": "object",
+      "properties": {
+        "UserID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-name": "GetRolesRequest",
+      "x-go-package": "pr-reviewer/internal/api/v1/role"
+    },
+    "GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/user"
+    },
+    "GrantRoleRequest": {
+      "type": "object",
+      "properties": {
+        "UserID": {
+          "$ref": "#/definitions/UserID"
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/role"
+    },
+    "GrantRoleResponse": {
+      "type": "object",
+      "properties": {
+        "granted": {
+          "type": "boolean",
+          "x-go-name": "Granted"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRole"
+          },
+          "x-go-name": "Roles"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/role"
+    },
+    "ListUserRequest": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/FilterData"
+        },
+        "page": {
+          "$ref": "#/definitions/PageData"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortData"
+          },
+          "x-go-name": "Sort"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/user"
+    },
+    "ListUserResponse": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/FilterData"
+        },
+        "page": {
+          "$ref": "#/definitions/PageData"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortData"
+          },
+          "x-go-name": "Sort"
+        }
+      },
+      "x-go-name": "ListDataParameters",
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "PageData": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Number"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Size"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": "string",
+          "x-go-name": "AppVersion"
+        },
+        "deviceID": {
+          "$ref": "#/definitions/DeviceID"
+        },
+        "deviceType": {
+          "type": "string",
+          "x-go-name": "DeviceType"
+        },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        },
+        "refreshToken": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        },
+        "withPendingRequest": {
+          "type": "boolean",
+          "x-go-name": "WithPendingRequest"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "accessTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AccessTokenExpiresAt"
+        },
+        "refreshToken": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        },
+        "refreshTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RefreshTokenExpiresAt"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "RemoveRoleRequest": {
+      "type": "object",
+      "properties": {
+        "UserID": {
+          "$ref": "#/definitions/UserID"
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/role"
+    },
+    "RemoveRoleResponse": {
+      "type": "object",
+      "properties": {
+        "removed": {
+          "type": "boolean",
+          "x-go-name": "Removed"
+        },
+        "removedFromCache": {
+          "type": "boolean",
+          "x-go-name": "RemovedFromCache"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRole"
+          },
+          "x-go-name": "Roles"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/role"
+    },
+    "Role": {
+      "description": "Role is a function a user can serve",
+      "type": "string",
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "ServerVersion": {
+      "type": "object",
+      "title": "represents the up version.",
+      "properties": {
+        "commit": {
+          "type": "string",
+          "x-go-name": "CommitHash"
+        },
+        "version": {
+          "type": "string",
+          "x-go-name": "AppVersion"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1"
+    },
+    "SessionData": {
+      "description": "SessionData used to represent data sent in json body with requests",
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": "string",
+          "x-go-name": "AppVersion"
+        },
+        "deviceID": {
+          "$ref": "#/definitions/DeviceID"
+        },
+        "deviceType": {
+          "type": "string",
+          "x-go-name": "DeviceType"
+        },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "SignInRequest": {
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": "string",
+          "x-go-name": "AppVersion"
+        },
+        "deviceID": {
+          "$ref": "#/definitions/DeviceID"
+        },
+        "deviceType": {
+          "type": "string",
+          "x-go-name": "DeviceType"
+        },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        },
+        "withPendingRequest": {
+          "type": "boolean",
+          "x-go-name": "WithPendingRequest"
+        }
+      },
+      "x-go-name": "AddAuthRequest",
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "SignInResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "accessTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AccessTokenExpiresAt"
+        },
+        "pendingRequest": {
+          "type": "boolean",
+          "x-go-name": "PendingRequest"
+        },
+        "refreshToken": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        },
+        "refreshTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RefreshTokenExpiresAt"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-name": "AddAuthResponse",
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "SignUpRequest": {
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": "string",
+          "x-go-name": "AppVersion"
+        },
+        "deviceID": {
+          "$ref": "#/definitions/DeviceID"
+        },
+        "deviceType": {
+          "type": "string",
+          "x-go-name": "DeviceType"
+        },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "SignUpResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "accessTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AccessTokenExpiresAt"
+        },
+        "refreshToken": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        },
+        "refreshTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RefreshTokenExpiresAt"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/auth"
+    },
+    "SortData": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string",
+          "x-go-name": "Field"
+        },
+        "sort": {
+          "type": "string",
+          "x-go-name": "Sort"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "Tokens": {
+      "description": "Tokens is wrapper for access and refresh tokens",
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "accessTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AccessTokenExpiresAt"
+        },
+        "refreshToken": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        },
+        "refreshTokenExpiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RefreshTokenExpiresAt"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/authHelper"
+    },
+    "UpdateUserRequest": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "displayName": {
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        },
+        "isCreator": {
+          "type": "boolean",
+          "x-go-name": "IsCreator"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "profileColorIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProfileColorIndex"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "sequenceWallet": {
+          "type": "string",
+          "x-go-name": "SequenceWallet"
+        },
+        "stripeCustomerID": {
+          "type": "string",
+          "x-go-name": "StripeCustomerID"
+        },
+        "stripePaymentMethodID": {
+          "type": "string",
+          "x-go-name": "StripePaymentMethodID"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/user"
+    },
+    "UpdateUserResponse": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "displayName": {
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        },
+        "isCreator": {
+          "type": "boolean",
+          "x-go-name": "IsCreator"
+        },
+        "profileColorIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProfileColorIndex"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "sequenceWallet": {
+          "type": "string",
+          "x-go-name": "SequenceWallet"
+        },
+        "stripeCustomerID": {
+          "type": "string",
+          "x-go-name": "StripeCustomerID"
+        },
+        "stripePaymentMethodID": {
+          "type": "string",
+          "x-go-name": "StripePaymentMethodID"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/api/v1/user"
+    },
+    "User": {
+      "description": "User is structure represent User object",
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreatedAt"
+        },
+        "displayName": {
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        },
+        "isCreator": {
+          "type": "boolean",
+          "x-go-name": "IsCreator"
+        },
+        "profileColorIndex": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProfileColorIndex"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "x-go-name": "Roles"
+        },
+        "sequenceWallet": {
+          "type": "string",
+          "x-go-name": "SequenceWallet"
+        },
+        "stripeCustomerID": {
+          "type": "string",
+          "x-go-name": "StripeCustomerID"
+        },
+        "stripePaymentMethodID": {
+          "type": "string",
+          "x-go-name": "StripePaymentMethodID"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "UserID": {
+      "description": "UserID is identifier for User",
+      "type": "string",
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "UserRole": {
+      "description": "UserRole",
+      "type": "object",
+      "properties": {
+        "role": {
+          "$ref": "#/definitions/Role"
+        },
+        "userID": {
+          "$ref": "#/definitions/UserID"
+        }
+      },
+      "x-go-package": "pr-reviewer/internal/model"
+    },
+    "genericError": {
+      "description": "GenericError - represent error structure for generic error (we need this to make all our error response the same)",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "x-go-name": "ErrorCode"
+        },
+        "data": {
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "ErrorMessage"
+        }
+      },
+      "x-go-name": "GenericError",
+      "x-go-package": "pr-reviewer/internal/api/middlewares"
+    }
+  }
+}

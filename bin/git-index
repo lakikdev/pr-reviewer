@@ -1,0 +1,3 @@
+git update-index --chmod=+x bitbucket-pipelines-auth.sh
+git update-index --chmod=+x bitbucket-pipelines-feed-vars.sh
+git update-index --chmod=+x bitbucket-pipelines-prepare.sh
